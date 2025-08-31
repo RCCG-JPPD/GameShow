@@ -1,27 +1,42 @@
+// src/App.jsx
 import React from "react";
-import { Routes, Route, Navigate, Link } from "react-router-dom";
+import { Routes, Route, Navigate, Link, useLocation } from "react-router-dom";
 import Controller from "./pages/Controller.jsx";
 import Display from "./pages/Display.jsx";
 import Buzz from "./pages/Buzz.jsx";
 import { Container, Nav } from "react-bootstrap";
 
 export default function App() {
+  const location = useLocation();
+  const isDisplay = location.pathname.startsWith("/display");
+
+  const routes = (
+    <Routes>
+      <Route path="/" element={<Navigate to="/display" replace />} />
+      <Route path="/controller" element={<Controller />} />
+      <Route path="/display" element={<Display />} />
+      <Route path="/buzz" element={<Buzz />} />
+      <Route path="*" element={<div>Not found</div>} />
+    </Routes>
+  );
+
+  // Hide Nav/layout on /display so it’s truly full-screen
+  if (isDisplay) return <>{routes}</>;
+
   return (
     <>
-      {true && (<Nav className="p-2 bg-dark text-light small gap-3">
-        <Link className="nav-link text-light" to="/controller">Controller</Link>
-        <Link className="nav-link text-light" to="/display">Display</Link>
-        <Link className="nav-link text-light" to="/buzz">Buzz (players)</Link>
-        <span className="ms-auto me-3">Jesus People Parish Game Show</span>
-      </Nav>)}
+      {/* Bright top nav */}
+      <Nav className="p-2 bg-light border-bottom small" style={{ color: "#0d6efd" }}>
+        <Link className="nav-link" to="/controller" style={{ color: "#0d6efd" }}>Controller</Link>
+        <Link className="nav-link" to="/display" style={{ color: "#0d6efd" }}>Display</Link>
+        <Link className="nav-link" to="/buzz" style={{ color: "#0d6efd" }}>Buzz (players)</Link>
+        <span className="ms-auto me-3" style={{ color: "#198754", fontWeight: 600 }}>
+          Jesus People Parish Game Show
+        </span>
+      </Nav>
+
       <Container fluid className="py-3">
-        <Routes>
-          <Route path="/" element={<Navigate to="/display" replace />} />
-          <Route path="/controller" element={<Controller />} />
-          <Route path="/display" element={<Display />} />
-          <Route path="/buzz" element={<Buzz />} />
-          <Route path="*" element={<div>Not found</div>} />
-        </Routes>
+        {routes}
       </Container>
     </>
   );

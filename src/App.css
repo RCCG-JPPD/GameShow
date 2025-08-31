@@ -1,38 +1,27 @@
-.App {
-  text-align: center;
+/* Ensure the Display route truly uses 100% of the page */
+html, body, #root {
+  height: 100%;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  margin: 0;              /* remove default body margin */
+  background: #000;       /* black background for display by default */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* A full-viewport surface for /display */
+.display-surface {
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  color: #fff;
+  overflow: hidden;       /* prevent scrollbars on giant text */
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+/* Optional: subtle fade-in used by your components */
+.fade-in {
+  animation: fadeIn 200ms ease-out;
 }
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to   { opacity: 1 }
 }

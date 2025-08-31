@@ -21,7 +21,6 @@ export default function Controller() {
   const [timer, setTimer] = useState({});
 
   useEffect(() => { ensureGameInitialized(); }, []);
-
   useEffect(() => onValue(ref(db, p.meta), s => setMeta(s.val() || null)), []);
   useEffect(() => onValue(ref(db, p.teams), s => setTeams(s.val() || {})), []);
   useEffect(() => onValue(ref(db, p.categories), s => setCats(s.val() || {})), []);
@@ -34,7 +33,8 @@ export default function Controller() {
   return (
     <Tabs defaultActiveKey="board" className="mb-3">
       <Tab eventKey="setup" title="Setup">
-        <SetupTab meta={meta} teams={teams} cats={cats} />
+        {/* Pass qs so Setup can show ALL questions and CRUD them */}
+        <SetupTab meta={meta} teams={teams} cats={cats} qs={qs} />
       </Tab>
       <Tab eventKey="board" title="Board">
         <BoardTab meta={meta} teams={teams} cats={cats} qs={qs} />

@@ -1,3 +1,4 @@
+// src/components/display/BoardView.jsx
 import React, { useMemo } from "react";
 
 export default function BoardView({ cats, qs }) {
@@ -17,15 +18,21 @@ export default function BoardView({ cats, qs }) {
     return m;
   },[qs]);
 
+  const grid = { display:"grid", gridTemplateColumns: `repeat(${Math.max(1, categories.length)}, 1fr)`, gap:"0.75rem", padding:"1rem", minHeight:"100vh", background:"#fff", color:"#111" };
+  const colStyle = { padding: "0.5rem" };
+  const titleStyle = { fontSize: "clamp(14px, 1.6vw, 22px)", fontWeight: 800, marginBottom: "0.5rem", textAlign: "center", color:"#0d6efd" };
+  const tileStyle = { display:"flex", alignItems:"center", justifyContent:"center", background:"var(--tile-bg)", border:`2px solid var(--tile-border)`, borderRadius: "12px", minHeight:"8rem", fontSize:"clamp(22px, 3vw, 44px)", marginBottom:"0.5rem", color:"#0d6efd", fontWeight: 800 };
+  const emptyStyle = { ...tileStyle, opacity: 0.4, color:"#6c757d" };
+
   return (
-    <div className="board-grid fade-in">
+    <div className="board-grid fade-in" style={grid}>
       {categories.map(([cid,c])=>(
-        <div key={cid} className="board-col">
-          <div className="board-col-title">{c.name}</div>
+        <div key={cid} className="board-col" style={colStyle}>
+          <div className="board-col-title" style={titleStyle}>{c.name}</div>
           {(byCat[cid]||[]).map(q=>(
-            <div key={q.id} className="board-tile">{q.points}</div>
+            <div key={q.id} className="board-tile" style={tileStyle}>{q.points}</div>
           ))}
-          {(!byCat[cid] || byCat[cid].length===0) && <div className="board-empty">—</div>}
+          {(!byCat[cid] || byCat[cid].length===0) && <div className="board-empty" style={emptyStyle}>—</div>}
         </div>
       ))}
     </div>
