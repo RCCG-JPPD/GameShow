@@ -1,5 +1,18 @@
 # RCCG GameShow
 
+Buzzer Page:
+https://gameshow-9j4r.onrender.com/#/buzz
+
+Display page:
+https://gameshow-9j4r.onrender.com/#/display
+
+Controller page:
+https://gameshow-9j4r.onrender.com/#/controller
+
+
+
+some errors:
+
 timers are different/ are out of sync it needs to be the same on all possible screens when running
 there is no edit question
 no view all questions

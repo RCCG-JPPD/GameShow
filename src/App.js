@@ -9,6 +9,7 @@ import { Container, Nav } from "react-bootstrap";
 export default function App() {
   const location = useLocation();
   const isDisplay = location.pathname.startsWith("/display");
+  const isBuzz = location.pathname.startsWith("/buzz");
 
   const routes = (
     <Routes>
@@ -20,8 +21,8 @@ export default function App() {
     </Routes>
   );
 
-  // Hide Nav/layout on /display so it’s truly full-screen
-  if (isDisplay) return <>{routes}</>;
+  // Hide Nav/layout on /display and /buzz so it’s truly full-screen
+  if (isDisplay||isBuzz) return <>{routes}</>;
 
   return (
     <>
