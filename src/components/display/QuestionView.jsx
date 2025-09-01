@@ -1,4 +1,3 @@
-// src/components/display/QuestionView.jsx
 import React from "react";
 import CircularCountdown from "../shared/CircularCountdown.jsx";
 import AutoFitText from "./AutoFitText.jsx";
@@ -24,17 +23,49 @@ export default function QuestionView({ meta, qs, timer, buzzer }) {
     overflow: "hidden",
   };
 
-  // The text box is exactly 80% of the viewport height and centered vertically.
-  const textBox = {
+  // The content band is exactly 80% of viewport height and centered vertically.
+  // If we have an image, we show a two-column grid: [image | text].
+  const band = {
     position: "absolute",
-    top: "10vh",              // 10% top margin
-    bottom: "10vh",           // 10% bottom margin  => 80% total height
+    top: "10vh",   // 10% top margin
+    bottom: "10vh",// 10% bottom margin => 80% height
     left: "6vw",
     right: "6vw",
+    display: q.questionImageUrl ? "grid" : "flex",
+    gridTemplateColumns: q.questionImageUrl ? "minmax(18vw, 34vw) 1fr" : undefined,
+    columnGap: q.questionImageUrl ? "3vw" : undefined,
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: 0,
+    overflow: "hidden",
+  };
+
+  const imgBox = {
+    height: "100%",
+    width: "100%",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 0,             // allow shrinking in all browsers
+    overflow: "hidden",
+    borderRadius: 12,
+    background: "#fff",
+    boxShadow: "0 8px 28px rgba(0,0,0,0.08)",
+  };
+
+  const imgStyle = {
+    maxWidth: "100%",
+    maxHeight: "100%",
+    objectFit: "contain",
+    display: "block",
+  };
+
+  const textCell = {
+    width: "100%",
+    height: "100%",
+    minHeight: 0,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     overflow: "hidden",
   };
 
@@ -79,16 +110,24 @@ export default function QuestionView({ meta, qs, timer, buzzer }) {
         </div>
       )}
 
-      {/* 80% of the screen, centered. AutoFitText grows until it *just* fits. */}
-      <div style={textBox}>
-        <AutoFitText
-          text={q.question}
-          minPx={24}
-          maxPx={1200}       // high cap so long screens can get very large
-          lineHeight={1.12}
-          weight={900}
-          align="center"
-        />
+      {/* Exactly 80% height band */}
+      <div style={band}>
+        {q.questionImageUrl && (
+          <div style={imgBox}>
+            <img src={q.questionImageUrl} alt="question visual" style={imgStyle} />
+          </div>
+        )}
+
+        <div style={textCell}>
+          <AutoFitText
+            text={q.question}
+            minPx={24}
+            maxPx={1200}     // high cap so long screens can get very large
+            lineHeight={1.12}
+            weight={900}
+            align="center"
+          />
+        </div>
       </div>
     </div>
   );
