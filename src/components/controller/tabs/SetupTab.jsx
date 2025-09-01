@@ -12,6 +12,7 @@ import {
   updateQuestion,
   deleteQuestion,
   resetGameKeepQuestions,
+  resetGameDeleteAllQuestions,
 } from "../../../rtdb/actions.js";
 import { storage } from "../../../firebase";
 import { ref as sref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
@@ -21,6 +22,14 @@ export default function SetupTab({ meta, teams, cats, qs }) {
   const [steal, setSteal] = useState(meta?.timers?.stealSec ?? 20);
   const enabledOrder = meta?.turn?.order || [];
   const [teamOrder, setTeamOrder] = useState(enabledOrder.length ? enabledOrder : TEAM_COLORS.slice(0,2));
+
+  const confirmDeleteAll = async () => {
+    const one = window.confirm("This will DELETE ALL QUESTIONS and reset the game. Continue?");
+    if (!one) return;
+    const two = window.confirm("Are you absolutely sure? This cannot be undone.");
+    if (!two) return;
+    await resetGameDeleteAllQuestions();
+  };
 
   return (
     <div className="p-2">
@@ -55,8 +64,11 @@ export default function SetupTab({ meta, teams, cats, qs }) {
       <QuestionsManager cats={cats} qs={qs} />
       <hr/>
 
-      <div className="d-flex gap-2">
+      <div className="d-flex flex-wrap gap-2">
         <Button variant="danger" onClick={resetGameKeepQuestions}>Reset Game (keep Qs)</Button>
+        <Button variant="outline-danger" onClick={confirmDeleteAll}>
+          Delete ALL Questions + Reset Game
+        </Button>
       </div>
     </div>
   );

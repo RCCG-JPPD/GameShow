@@ -384,3 +384,45 @@ export async function resetGameKeepQuestions() {
   }
   await writeUpdates(updates);
 }
+
+export async function resetGameDeleteAllQuestions() {
+  const updates = {};
+
+  // meta/display
+  updates[`${p.meta}/status`] = "board";
+  updates[`${p.meta}/displayView`] = "board";
+  updates[`${p.meta}/current`] = {
+    categoryId: null,
+    questionId: null,
+    selectingTeam: null,
+    phase: PHASE.IDLE,
+    resolved: false,
+    judgedBy: null,
+    judgedAt: null,
+  };
+
+  // buzzer/timer/audit
+  updates[`${p.buzzer}`] = { open: false, winner: null, ts: null };
+  updates[`${p.timer}`] = {
+    running: false,
+    mode: TIMER_MODE.FIRST,
+    durationSec: 35,
+    startedAt: null,
+    remainingSec: 35,
+  };
+  updates[`${p.audit}`] = { last: null, redo: null, log: {} };
+
+  // teams: zero scores + clear per-question blocks
+  const teamsSnap = await get(R(p.teams));
+  if (teamsSnap.exists()) {
+    Object.keys(teamsSnap.val()).forEach((color) => {
+      updates[`${p.teams}/${color}/score`] = 0;
+      updates[`${p.teams}/${color}/blockedCurrent`] = false;
+    });
+  }
+
+  // DELETE ALL QUESTIONS
+  updates[`${p.questions}`] = null;
+
+  await writeUpdates(updates);
+}
